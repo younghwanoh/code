@@ -31,7 +31,7 @@ class MyDAG:
         if start in self.graph:
             self.graph[start].remove(end)
             self.n_income[end] -= 1
-            assert all([i >=0 for i in self.n_income.values()])
+            assert all(i>=0 for i in self.n_income.values())
 
             # Remove node without any edges
             if self.n_income[start] == 0 and len(self.graph[start]) == 0:
@@ -65,7 +65,11 @@ def topological_sort(g):
             if g.n_income[end] == 0:
                 queue.append(end)
 
-    return sorted_list
+    if any(i>0 for i in g.n_income.values()):
+        print("Cycle detected")
+        sys.exit()
+    else:
+        return sorted_list
 
 
 
@@ -79,6 +83,17 @@ if __name__ == "__main__":
         2:  [],
         9:  [],
         10: []
+    }
+
+    test_graph_cycle = {
+        5:  [11],
+        7:  [11,8],
+        3:  [8,10],
+        11: [2,9,10],
+        8:  [9],
+        2:  [],
+        9:  [],
+        10: [3]
     }
 
 
